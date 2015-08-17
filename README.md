@@ -37,9 +37,10 @@ DummyWorker.prototype.processMessage = function (message) {
     // remove message from queue
     this.deleteMessage(message);
 };
-```javascript
+```
 
 ## Starting a workflow
+
 ```javascript
 
 var dispatcher = new Dispatcher(connection);
