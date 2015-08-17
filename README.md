@@ -19,8 +19,8 @@ var connection = Sqs.getConnection({
     secretAccessKey: 'secret access key',
     region: 'us-east-1'
 });
-
 ```
+
 ## Define a worker
 ```javascript
 var util = require('util');
