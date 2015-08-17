@@ -9,6 +9,7 @@
   "author": "Tal Almagor <tal.almagor@ironsrc.com>",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1.45",
     "bluebird": "^2.9.34",
     "lodash": "^3.10.1",
     "log4js": "^0.6.26"
