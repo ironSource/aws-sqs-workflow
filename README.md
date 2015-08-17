@@ -62,8 +62,8 @@ Worker2.prototype.processMessage = function (message) {
 var dispatcher = new Dispatcher(connection);
 
 // initiate one worker for each task
-var worker1 = new Worker1(connection, {QueueUrl: 'http://localhost:4568/q1'});
-var worker2 = new Worker2(connection, {QueueUrl: 'http://localhost:4568/q2'});
+var worker1 = new Worker1(connection, 'q1', {});
+var worker2 = new Worker2(connection, 'q2', {});
 
 // start polling
 worker1.poll();
