@@ -1,7 +1,7 @@
 # aws-sqs-workflow
 Simple Workflow abstraction on top of Amazon SQS Service
 
-# Installation
+# Installation (In the future)
 npm install aws-sqs-workflow
 
 # Usage
@@ -9,10 +9,11 @@ npm install aws-sqs-workflow
 ## Require
 ```javascript
 var workflow = require('aws-sqs-workflow');
-var Sqs = workflow.Sqs;
+var Connection = workflow.Connection;
 var Worker = workflow.Worker;
 var Dispatcher = worker.Dispatcher;
-var connection = Sqs.getConnection({
+
+var connection = Connection({
     endpoint: 'http://localhost:4568',
     apiVersion: '2012-11-05',
     accessKeyId: 'access key',
@@ -25,27 +26,49 @@ var connection = Sqs.getConnection({
 ```javascript
 var util = require('util');
 
-function DummyWorker() {
-    Worker.call(this);
+function Worker1() {
+    Worker1.call(this);
 }
 
-util.inherits(DummyWorker, Worker);
+function Worker2() {
+    Worker2.call(this);
+}
 
-DummyWorker.prototype.processMessage = function (message) {
+util.inherits(Worker1, Worker);
+util.inherits(Worker2, Worker);
+
+Worker1.prototype.processMessage = function (message) {
     // do the thing here, in our case we just print the message
-    console.log(messagge);
+    console.log('worker1', message);
     // remove message from queue
-    this.deleteMessage(message);
+    return this.deleteMessage(message)
+        .then(function() {
+            dispatcher.dispatch('q2', {'key': 'value'});
+        });
+};
+
+Worker2.prototype.processMessage = function (message) {
+    // do the thing here, in our case we just print the message
+    console.log('worker2', message);
+    // remove message from queue
+    return this.deleteMessage(message);
 };
 ```
 
-## Starting a workflow
+## Starting a workflow using a dispatcher
 
 ```javascript
-
+// create an event dispatcher
 var dispatcher = new Dispatcher(connection);
-var worker = new DummyWorker(connection, {QueueUrl: 'http://localhost:4568/test'});
 
+// initiate one worker for each task
+var worker1 = new Worker1(connection, {QueueUrl: 'http://localhost:4568/q1'});
+var worker2 = new Worker2(connection, {QueueUrl: 'http://localhost:4568/q2'});
+
+// start polling
+worker1.poll();
+worker2.poll();
+
+// fire the first event to start the workflow
 dispatcher.dispatch('test', {'hello': 'world'});
-worker.poll();
 ```
