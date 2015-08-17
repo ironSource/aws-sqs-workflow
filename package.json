@@ -1,0 +1,20 @@
+{
+  "name": "aws-sqs-workflow",
+  "version": "1.0.0",
+  "description": "SQS Workflow Example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tal Almagor <tal.almagor@ironsrc.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^2.9.34",
+    "lodash": "^3.10.1",
+    "log4js": "^0.6.26"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/talmago/aws-sqs-workflow"
+  }
+}
