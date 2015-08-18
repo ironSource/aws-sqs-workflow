@@ -8,9 +8,10 @@ npm install aws-sqs-workflow
 
 ## Require
 ```javascript
-var Connection = require('./lib/connection');
-var Worker = require('./lib/worker');
-var Dispatcher = require('./lib/dispatcher');
+var Workflow = require('aws-sqs-workflow');
+var Connection = Workflow.Connection;
+var Worker = Workflow.Worker;
+var Dispatcher = Workflow.dispatcher;
 ```
 
 ## Create a connection
