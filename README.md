@@ -30,27 +30,20 @@ var connection = Connection({
 // create a workflow
 var workflow = new Workflow(connection);
 
-// create new worker
+// create some dummy workers
 var worker1 = new workflow.Worker('q1', {});
 var worker2 = new workflow.Worker('q2', {});
 
 // create an event dispatcher
 var dispatcher = new workflow.Dispatcher();
 
-// dummy workers don't really do nothing
-// and call complete to make sure message will be
-// removed from the message queue.
+// pass the result of worker1 to worker2
 worker1.on('message', function(message) {
-    worker1.complete(message);
+    dispatcher.dispatch('q2', {"result": "hello from worker 1!"});
 });
 
 worker2.on('message', function(message) {
-    worker2.complete(message);
-});
-
-// when worker1 completes, it should re-dispatch the message
-worker1.on('complete', function(message) {
-    dispatcher.dispatch('q2', JSON.parse(message.Body));
+    // do something here ..
 });
 
 // start polling

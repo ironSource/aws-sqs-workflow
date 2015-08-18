@@ -1,3 +1,2 @@
-module.exports.Worker = require('./lib/worker');
-module.exports.Dispatcher = require('./lib/dispatcher');
+module.exports.Workflow = require('./lib/workflow');
 module.exports.Connection = require('./lib/connection');
