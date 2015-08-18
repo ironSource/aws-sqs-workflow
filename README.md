@@ -5,11 +5,16 @@ Simple Workflow abstraction on top of Amazon SQS Service
 npm install aws-sqs-workflow
 
 # Usage
+
+## Require
 ```javascript
 var Connection = require('./lib/connection');
 var Worker = require('./lib/worker');
 var Dispatcher = require('./lib/dispatcher');
+```
 
+## Create a connection
+```javascript
 var connection = Connection({
     endpoint: 'http://localhost:4568',
     apiVersion: '2012-11-05',
@@ -17,7 +22,10 @@ var connection = Connection({
     secretAccessKey: 'secret access key',
     region: 'us-east-1'
 });
+```
 
+## Define a workflow
+```javascript
 // create new worker
 var worker1 = new Worker(connection, 'q1', {});
 var worker2 = new Worker(connection, 'q2', {});
