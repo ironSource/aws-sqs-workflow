@@ -8,10 +8,9 @@ npm install aws-sqs-workflow
 
 ## Require
 ```javascript
-var Workflow = require('aws-sqs-workflow');
-var Connection = Workflow.Connection;
-var Worker = Workflow.Worker;
-var Dispatcher = Workflow.dispatcher;
+var SQSWorkflow = require('aws-sqs-workflow');
+var Connection = SQSWorkflow.Connection;
+var Workflow = SQSWorkflow.Workflow;
 ```
 
 ## Create a connection
@@ -27,14 +26,26 @@ var connection = Connection({
 
 ## Define a workflow
 ```javascript
-// create new worker
-var worker1 = new Worker(connection, 'q1', {});
-var worker2 = new Worker(connection, 'q2', {});
-var dispatcher = new Dispatcher(connection);
 
-// pass the result of worker1 to worker2
+// create a workflow
+var workflow = new Workflow(connection);
+
+// create new worker
+var worker1 = new workflow.Worker('q1', {});
+var worker2 = new workflow.Worker('q2', {});
+
+// create an event dispatcher
+var dispatcher = new workflow.Dispatcher();
+
+// dummy workers don't really do nothing
+// and call complete to make sure message will be
+// removed from the message queue.
 worker1.on('message', function(message) {
     worker1.complete(message);
+});
+
+worker2.on('message', function(message) {
+    worker2.complete(message);
 });
 
 // when worker1 completes, it should re-dispatch the message
@@ -46,6 +57,6 @@ worker1.on('complete', function(message) {
 worker1.poll();
 worker2.poll();
 
-// dispatch first event to start the work flow
+// dispatch an event to start the workflow
 dispatcher.dispatch('q1', {'hello': 'world'});
 ```
