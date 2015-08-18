@@ -5,13 +5,10 @@ Simple Workflow abstraction on top of Amazon SQS Service
 npm install aws-sqs-workflow
 
 # Usage
-
-## Require
 ```javascript
-var workflow = require('aws-sqs-workflow');
-var Connection = workflow.Connection;
-var Worker = workflow.Worker;
-var Dispatcher = worker.Dispatcher;
+var Connection = require('./lib/connection');
+var Worker = require('./lib/worker');
+var Dispatcher = require('./lib/dispatcher');
 
 var connection = Connection({
     endpoint: 'http://localhost:4568',
@@ -20,55 +17,21 @@ var connection = Connection({
     secretAccessKey: 'secret access key',
     region: 'us-east-1'
 });
-```
 
-## Define a worker
-```javascript
-var util = require('util');
-
-function Worker1() {
-    Worker1.call(this);
-}
-
-function Worker2() {
-    Worker2.call(this);
-}
-
-util.inherits(Worker1, Worker);
-util.inherits(Worker2, Worker);
-
-Worker1.prototype.processMessage = function (message) {
-    // do the thing here, in our case we just print the message
-    console.log('worker1', message);
-    // remove message from queue
-    return this.deleteMessage(message)
-        .then(function() {
-            dispatcher.dispatch('q2', {'key': 'value'});
-        });
-};
-
-Worker2.prototype.processMessage = function (message) {
-    // do the thing here, in our case we just print the message
-    console.log('worker2', message);
-    // remove message from queue
-    return this.deleteMessage(message);
-};
-```
-
-## Starting a workflow using a dispatcher
-
-```javascript
-// create an event dispatcher
+// create new worker
+var worker1 = new Worker(connection, 'q1', {});
+var worker2 = new Worker(connection, 'q2', {});
 var dispatcher = new Dispatcher(connection);
 
-// initiate one worker for each task
-var worker1 = new Worker1(connection, 'q1', {});
-var worker2 = new Worker2(connection, 'q2', {});
+// pass the result of worker1 to worker2
+worker1.on('complete', function(message) {
+    dispatcher.dispatch('q2', JSON.parse(message.Body));
+});
 
 // start polling
 worker1.poll();
 worker2.poll();
 
-// fire the first event to start the workflow
-dispatcher.dispatch('test', {'hello': 'world'});
+// dispatch first event to start the work flow
+dispatcher.dispatch('q1', {'hello': 'world'});
 ```
