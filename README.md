@@ -33,6 +33,11 @@ var worker2 = new Worker(connection, 'q2', {});
 var dispatcher = new Dispatcher(connection);
 
 // pass the result of worker1 to worker2
+worker1.on('message', function(message) {
+    worker1.complete(message);
+});
+
+// when worker1 completes, it should re-dispatch the message
 worker1.on('complete', function(message) {
     dispatcher.dispatch('q2', JSON.parse(message.Body));
 });
