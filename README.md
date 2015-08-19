@@ -2,7 +2,9 @@
 Simple Workflow abstraction on top of Amazon SQS Service
 
 # Installation (In the future)
+```bash
 npm install aws-sqs-workflow
+```
 
 # Usage
 
