@@ -29,8 +29,11 @@ var connection = Connection({
 ## Define a workflow
 ```javascript
 
-// create a workflow
+// create a new workflow
 var workflow = new Workflow(connection);
+
+// or connect to an existing workflow
+// var workflow = new Workflow(connection, 'some workflow identifier');
 
 // register workflow events: ['e1', 'e2']
 workflow.addEvents('e1', 'e2')
@@ -59,6 +62,9 @@ workflow.addEvents('e1', 'e2')
 
         // dispatch an event to start the workflow
         dispatcher.dispatch('e1', {'hello': 'world'});
+
+        // or dispatch multiple events at a time
+        // dispatcher.dispatch(['e1', 'e2', {'hello': 'world'}];
     })
     .catch(function(e) {
         console.error(e);
