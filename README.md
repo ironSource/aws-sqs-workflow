@@ -77,7 +77,7 @@ var dispatcher = new workflow.Dispatcher();
 
 ```javascript
 // register workflow events: ['e1', 'e2']
-workflow.addEvents('e1', 'e2')
+workflow.addEvents(['e1', 'e2'])
     .then(function() {
 
         // create an event dispatcher
