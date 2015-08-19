@@ -68,44 +68,60 @@ workflow.addEvents('e1', 'e2')
 ```
 
 #### Dispatcher
-```Dispatcher``` is an event dispatcher to 'fire' events in order to trigger
-some workflow operations.
+```Dispatcher``` is the way we 'fire' events so we can trigger operations in our workflow.
 ```javascript
 // define an event dispatcher
 var dispatcher = new workflow.Dispatcher();
 ```
+#### Worker
+```Worker``` is in charge of the event-polling and execution of workflow operations.
+It's constructor recieves the trigger ```event``` and ```options``` object:
+    * ```LogLevel```: logging level ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']. default is 'DEBUG'
+    * ```MaxNumberOfMessages```: Integer (?how many messages we shall retrieve upon polling request). default is 10.
+    * ```VisibilityTimeout```: Integer (seconds, ?how long we want to lock on this worker). default is 60.
+    * ```WaitTimeSeconds```: Integer (seconds, ?how long should we wait for a message). default is 20.
+    * ```PollingInterval```: Integer (seconds, ?how often polling is executed). default is 10.
 
+```javascript
+var worker = new workflow.Worker('event-name', {});
+```
+> **NOTE:** Worker must be initialized for events that were previuosly registered to the workflow.
+An error will be thrown upon cases where worker is initialized with unknown event.
+
+
+#### Example (Simple consumer/producer)
 ```javascript
 // register workflow events: ['e1', 'e2']
 workflow.addEvents(['e1', 'e2'])
     .then(function() {
 
-        // create an event dispatcher
+        // event dispatcher
         var dispatcher = new workflow.Dispatcher();
 
-        // create some dummy workers
-        var worker1 = new workflow.Worker('e1', {});
-        var worker2 = new workflow.Worker('e2', {});
+        // producer
+        var producer = new workflow.Worker('e1', {});
+        
+        // consumer
+        var consumer = new workflow.Worker('e2', {});
 
-        // pass the result of worker1 to worker2
-        worker1.on('message', function(message) {
+        // producer operation will be defined here
+        // and the outout will be dispathed to the consumer
+        producer.on('message', function(message) {
             // .. process the message  ..
             dispatcher.dispatch('e2', {"result": "hello from worker 1!"});
         });
-
-        worker2.on('message', function(message) {
+        
+        // consumer operation will be defined here
+        consumer.on('message', function(message) {
             // .. process the message  ..
         });
 
         // start polling
-        worker1.poll();
-        worker2.poll();
+        producer.poll();
+        consumer.poll();
 
         // dispatch an event to start the workflow
         dispatcher.dispatch('e1', {'hello': 'world'});
-
-        // or dispatch multiple events at a time
-        // dispatcher.dispatch(['e1', 'e2', {'hello': 'world'}];
     })
     .catch(function(e) {
         console.error(e);
