@@ -1,21 +1,33 @@
 # aws-sqs-workflow
-Simple Workflow abstraction on top of Amazon SQS Service
 
-# Installation (In the future)
-```bash
+## Overview
+Simple Workflow abstraction on top of Amazon SQS Service.
+See https://aws.amazon.com/sqs/ for more details on AWS SQS.
+See http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html for
+the AWS SQS SDK in Javascript/Node.js.
+
+# Quick Start
+
+#### Install (in the future)
+```sh
 npm install aws-sqs-workflow
 ```
 
-# Usage
+After the installation, you can start using the package;
 
-## Require
 ```javascript
 var SQSWorkflow = require('aws-sqs-workflow');
 var Connection = SQSWorkflow.Connection;
 var Workflow = SQSWorkflow.Workflow;
 ```
 
-## Create a connection
+#### Create a connection
+Creating a connection is simply a short circuit to AWS.SQS class constuctor.
+```Connection``` should receive an ```options``` object as explained here: http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html#constructor-property
+
+In this example, we use the fake_sqs tool to test things locally.
+See: https://github.com/iain/fake_sqs for a quick start of this tool.
+
 ```javascript
 var connection = Connection({
     endpoint: 'http://localhost:4568',
@@ -26,14 +38,15 @@ var connection = Connection({
 });
 ```
 
-## Define a workflow
-```javascript
+#### Declare a workflow
+```Workflow``` receives a connection (as explained above) and also an ```options``` 
+object for setting up few things for the workflow:
+   * ```LogLevel```: logging level ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']
+   * ```Id```: Workflow Id. This might be useful when trying to connect to an existing workflow. 
 
+```javascript
 // create a new workflow
 var workflow = new Workflow(connection);
-
-// or connect to an existing workflow
-// var workflow = new Workflow(connection, 'some workflow identifier');
 
 // register workflow events: ['e1', 'e2']
 workflow.addEvents('e1', 'e2')
