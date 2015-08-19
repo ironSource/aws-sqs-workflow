@@ -47,7 +47,35 @@ object for setting up few things for the workflow:
 ```javascript
 // create a new workflow
 var workflow = new Workflow(connection);
+```
 
+#### Event Registeration
+
+First thing we want to do is to declare some events that will be triggered during the
+workflow lifetime. In the lower level implementation, each event will be handled by a dedicated
+message queue and therfore we must define the events befoere we start working with messages to ensure
+we non existing queues are addressed at runtime.
+
+```javascript
+// register workflow events: ['e1', 'e2']
+workflow.addEvents('e1', 'e2')
+    .then(function() {
+        ..
+    })
+    .catch(function(e) {
+        ..
+    });
+```
+
+#### Dispatcher
+```Dispatcher``` is an event dispatcher to 'fire' events in order to trigger
+some workflow operations.
+```javascript
+// define an event dispatcher
+var dispatcher = new workflow.Dispatcher();
+```
+
+```javascript
 // register workflow events: ['e1', 'e2']
 workflow.addEvents('e1', 'e2')
     .then(function() {
