@@ -81,6 +81,7 @@ var worker = new workflow.Worker('event-name', {});
 ```
 
 Constructor receives the following arguments:
+    
     * ```event```: MQ event.
     * ```options```: object.
         * ```LogLevel```: logging level ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']. default is 'DEBUG'
