@@ -81,8 +81,7 @@ var worker = new workflow.Worker('event-name', {});
 ```
 
 Constructor receives the following arguments:
-
-    * ```event``` : MQ event.
+    * ```event```: MQ event.
     * ```options```: object.
         * ```LogLevel```: logging level ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']. default is 'DEBUG'
         * ```MaxNumberOfMessages```: Number (?how many messages to poll upon request). default/max is 10.
