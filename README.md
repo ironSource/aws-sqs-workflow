@@ -76,18 +76,20 @@ var dispatcher = new workflow.Dispatcher();
 #### Worker
 ```Worker``` is in charge of the event-polling and execution of workflow operations.
 
-Constructor
-    * ```event``` : MQ event.
-    * ```options```: object.
-        * ```LogLevel```: logging level ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']. default is 'DEBUG'
-        * ```MaxNumberOfMessages```: Integer (?how many messages we shall retrieve upon polling request). default is 10.
-        * ```VisibilityTimeout```: Integer (seconds, ?how long we want to lock on this worker). default is 60.
-        * ```WaitTimeSeconds```: Integer (seconds, ?how long should we wait for a message). default is 20.
-        * ```PollingInterval```: Integer (seconds, ?how often polling is executed). default is 10.
-
 ```javascript
 var worker = new workflow.Worker('event-name', {});
 ```
+
+Constructor receives the following arguments:
+
+    * ```event``` : MQ event.
+    * ```options```: object.
+        * ```LogLevel```: logging level ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']. default is 'DEBUG'
+        * ```MaxNumberOfMessages```: Number (?how many messages to poll upon request). default/max is 10.
+        * ```VisibilityTimeout```: Number (seconds, ?how long we want to lock on this worker). default is 60.
+        * ```WaitTimeSeconds```: Number (seconds, ?how long should we wait for a message). default is 20.
+        * ```PollingInterval```: Number (seconds, ?how often polling is executed). default is 10.
+
 > **NOTE:** Worker must be initialized for events that were previuosly registered to the workflow.
 An error will be thrown upon cases where worker is initialized with unknown event.
 
