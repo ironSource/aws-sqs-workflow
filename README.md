@@ -75,9 +75,10 @@ var dispatcher = new workflow.Dispatcher();
 ```
 #### Worker
 ```Worker``` is in charge of the event-polling and execution of workflow operations.
-Constructor receives:
-    * ```event```: MQ event.
-    * ```options``` object:
+
+Constructor
+    * ```event``` : MQ event.
+    * ```options```: object.
         * ```LogLevel```: logging level ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR']. default is 'DEBUG'
         * ```MaxNumberOfMessages```: Integer (?how many messages we shall retrieve upon polling request). default is 10.
         * ```VisibilityTimeout```: Integer (seconds, ?how long we want to lock on this worker). default is 60.
